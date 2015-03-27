@@ -55,7 +55,7 @@ class EGWebSocketServer extends EGWebServer{
 		$server->push($fd, "this is server");
 	}
 	
-	public function onClose($server,$fd){
-		echo "client {$fd} closed\n";
+	public function onClose($server, $clientId, $fromId){
+		echo "client {$fromId} closed\n";
 	}
 }
