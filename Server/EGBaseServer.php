@@ -13,6 +13,10 @@ abstract class EGBaseServer implements EGIServer{
 		$this->_logger = $logger;
 	}
 	
+	/**
+	 * 读取配置文件，在对应服务器的子类中覆盖
+	 * @param unknown $fileName
+	 */
 	public function loadConfig($fileName){}
 	/**
 	 * 启动服务器
