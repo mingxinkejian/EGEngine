@@ -13,9 +13,24 @@ class EGCacheFactory {
 	 * @param unknown $type        	
 	 */
 	public static function getInstance($config,$type = self::REDIS) {
+		if (empty($config)){
+			return null;
+		}
+		$name = $config['name'];		
+		
+		if (empty(self::$_instances[$name])){
+			$class  =   strpos($type,'\\')? $type : 'Cache\\CacheDriver\\EG'.$type;
+			$instance=new $class();
+			$instance->connection($config);
+			
+			self::$_configs[$name]=$config;
+			self::$_instances[$name]=$instance;
+		}
+
+		return self::$_instances[$name];
 	}
 	/**
-	 * 删除实例，并关闭连接
+	 * 删除实例
 	 * @param unknown $names
 	 */
 	public static function destoryInstance($names = array()) {
@@ -23,26 +38,14 @@ class EGCacheFactory {
 			return true;
 		}
 		
-		if (empty ( $names )) {
-			foreach ( self::$_instances as $name => $redis ) {
-				if (self::$_configs [$name] ['pconnect']) {
-					continue;
-				}
-				$redis->close ();
-				unset ( self::$_configs [$name] );
-			}
-		} else {
-			foreach ( $names as $name ) {
-				if (isset ( self::$_instances [$name] )) {
-					if (self::$_configs [$name] ['pconnect']) {
-						continue;
-					}
-					self::$_instances [$name]->close ();
-					unset ( self::$_configs [$name] );
-				}
-			}
+		if (empty($names)){
+			return true;
 		}
 		
+		foreach ($names as $name) {
+			unset(self::$_instances[$name]);
+			unset(self::$_configs[$name]);
+		}
 		return true;
 	}
 }

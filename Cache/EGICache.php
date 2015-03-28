@@ -4,19 +4,16 @@ namespace Cache;
 
 interface EGICache {
 	
-	public function addCache($key,$value,$config=array());
+	public function connection($config);
 	
-	public function setCache($key,$value,$config=array());
+	public function addCache($key,$value,$expire);
+	
+	public function setCache($key,$value,$expire);
 	
 	public function getCache($key);
 	
 	public function delete($key);
-	
-	/*
-	 * 队列缓存
-	*/
-	public function queue($key);
-	
+		
 	public function increment($key, $step = 1);
 	
 	public function decrement($key, $step = 1);
