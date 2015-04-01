@@ -7,7 +7,9 @@ class EGRedis extends EGABaseCache{
 	
 
 	public function __construct(){
-		
+		if (extension_loaded('redis')){
+			
+		}
 		$this->_handler=new \Redis();
 	}
 	
