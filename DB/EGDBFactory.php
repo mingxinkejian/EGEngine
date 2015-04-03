@@ -19,15 +19,11 @@ class EGDBFactory {
 		
 		if (empty(self::$_instances[$name])){
 			$class  =   strpos($type,'\\')? $type : 'DB\\DBDriver\\EG'.$type;
-			$instance=new $class();	
+			$instance=new $class($config);	
 			self::$_configs[$name]=$config;
 			self::$_instances[$name]=$instance;
 			
-			if ($config['connType']=='lazy'){
-				$instance->lazyConnection($config);
-			}else{
-				$instance->connection($config);
-			}
+			
 		}
 		
 		return self::$_instances[$name];

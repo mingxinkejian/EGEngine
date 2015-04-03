@@ -7,10 +7,12 @@ interface EGIDB {
 	/**
 	 * 懒加载，只有对数据库做操作时才连接
 	 */
-	public function lazyConnection($config);
+	protected function lazyConnection();
 	
 	/**
 	 * 连接数据库
 	 */
-	public function connection($config);
+	protected function nowConnection();
+	
+	public function connection();
 }
