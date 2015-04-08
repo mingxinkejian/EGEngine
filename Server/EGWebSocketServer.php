@@ -54,16 +54,16 @@ class EGWebSocketServer extends EGWebServer{
 	 * @param unknown $fd
 	 * @param unknown $data
 	 * @param unknown $opcode OPCODE_TEXT_FRAME = 0x1 ，文本数据 OPCODE_BINARY_FRAME = 0x2 ，二进制数据
-	 * @param unknown $fin
+	 * @param unknown $finish
 	 */
-	public function onMessage(\swoole_websocket_server $server,$frame){
+	public function onMessage(\swoole_websocket_server $server,$data,$binary_data = false, $finish = true){
 		$connections = $server->connection_list();
 	    foreach($connections as $fd)
 	    {
 	        $info = $server->connection_info($fd);
-	        if ($fd != $frame->fd and $info['websocket_status'] > 1)
+	        if ($fd != $data->fd and $info['websocket_status'] > 1)
 	        {
-	            $server->push($fd, $frame->data);
+	            $server->push($fd, $data->data,$binary_data,$finish);
 	        }
 	    }
 	}
