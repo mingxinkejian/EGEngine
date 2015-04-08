@@ -70,7 +70,7 @@ class EGMongoDB extends EGADB {
 	    	if (empty($dbName)){
 	    		// 当前MongoDb对象
 	    		$this->_dbName  =  $dbName;
-	    		$this->_mongo = $this->_handler->selectDb($dbName);
+	    		$this->_mongo = $this->selectDb($dbName);
 	    	}
 	    	if($this->_collectionName != $collection) {
 	    		$this->_collection =  $this->_mongo->selectCollection($collection);
@@ -84,7 +84,7 @@ class EGMongoDB extends EGADB {
 
 	public function selectDB($dbName) {
 		// TODO Auto-generated method stub
-		
+		return $this->_handler->selectDb($dbName);
 	}
 
 
