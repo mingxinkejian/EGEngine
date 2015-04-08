@@ -12,7 +12,9 @@ class EGWebSocketServer extends EGWebServer{
 		$this->_server=new \swoole_websocket_server($host, $port);
 	
 		$this->_server->on('start', array($this, 'onStart'));
+		$this->_server->on('request' , array( $this , 'onRequest'));
 		$this->_server->on('message' , array( $this , 'onMessage'));
+		
 		if($isSetGlobal==true){
 			$this->_server->setGlobal(HTTP_GLOBAL_ALL,HTTP_GLOBAL_GET | HTTP_GLOBAL_POST);
 		}
@@ -42,6 +44,10 @@ class EGWebSocketServer extends EGWebServer{
 	public function onOpen(\swoole_websocket_server $server,$fd){
 		
 	}
+	
+	public function onRequest(\swoole_http_request $request,\swoole_http_response $response){
+		
+	}
 
 	/**
 	 * @param unknown $server
@@ -50,12 +56,19 @@ class EGWebSocketServer extends EGWebServer{
 	 * @param unknown $opcode OPCODE_TEXT_FRAME = 0x1 ，文本数据 OPCODE_BINARY_FRAME = 0x2 ，二进制数据
 	 * @param unknown $fin
 	 */
-	public function onMessage($server,$fd, $data, $opcode, $fin){
-		echo "receive from {$fd}:{$data},opcode:{$opcode},fin:{$fin}\n";
-		$server->push($fd, "this is server");
+	public function onMessage(\swoole_websocket_server $server,$frame){
+		$connections = $server->connection_list();
+	    foreach($connections as $fd)
+	    {
+	        $info = $server->connection_info($fd);
+	        if ($fd != $frame->fd and $info['websocket_status'] > 1)
+	        {
+	            $server->push($fd, $frame->data);
+	        }
+	    }
 	}
 	
-	public function onClose($server, $clientId, $fromId){
+	public function onClose(\swoole_websocket_server $server, $clientId, $fromId){
 		echo "client {$fromId} closed\n";
 	}
 }
