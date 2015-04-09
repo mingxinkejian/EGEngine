@@ -93,10 +93,30 @@ class EGMongoDB extends EGADB {
 		
 	}
 
-
-	public function execute($sql, $fetchSql = false) {
+	/*
+	 * Runs JavaScript code on the database server.
+	 */
+	public function execute($code, $options=array()) {
 		// TODO Auto-generated method stub
-		
+		$this->_sql = 'execute:'.$code;
+		$result   = $this->_mongo->execute($code,$options);
+		$this->debug(false);
+		if($result['ok']) {
+			return $result['retval'];
+		}else{
+			echo 'execute run error!';
+			return false;
+		}
+	}
+	
+	public function commond($command=array()){
+		$this->_sql = 'command:'.json_encode($command);
+		$result   = $this->_mongo->command($command);
+		if(!$result['ok']) {
+			echo 'commond run error!';
+			return false;
+		}
+		return $result;
 	}
 
 
@@ -132,7 +152,12 @@ class EGMongoDB extends EGADB {
 
 	public function clearTable($options = array()) {
 		// TODO Auto-generated method stub
-		
+		try{
+			$result   =  $this->_collection->drop();
+			return $result;
+		} catch (\MongoCursorException $e) {
+			echo $e->getMessage();
+		}
 	}
 
 
@@ -148,45 +173,62 @@ class EGMongoDB extends EGADB {
 	}
 
 
-	public function distanct($options = array()) {
+	public function distinct($files,$args=array()) {
 		// TODO Auto-generated method stub
-		
+		return $this->_collection->distinct($files,$args);
+	}
+	
+	public function group($keys,$initial,$reduce,$options=[]){
+		return $this->_collection->group($keys,$initial,$reduce,$options);
 	}
 
 
 	public function freeResult() {
 		// TODO Auto-generated method stub
-		
+		$this->_cursor=null;
 	}
 
 
 	public function close() {
 		// TODO Auto-generated method stub
-		
+		if($this->_handler) {
+			$this->_handler->close();
+			$this->_handler = null;
+			$this->_mongo = null;
+			$this->_collection =  null;
+			$this->_cursor = null;
+		}
 	}
 
 
 	public function getDBError() {
 		// TODO Auto-generated method stub
-		
+		$this->_dbErr = $this->_mongo->lastError();
+		return $this->_dbErr;
 	}
 
 
 	public function getLastSql() {
 		// TODO Auto-generated method stub
-		
+		return $this->_sql;
 	}
 
 
 	public function getLastId() {
 		// TODO Auto-generated method stub
-		
+		return $this->_lastId;
 	}
 
 
 	public function getTables() {
 		// TODO Auto-generated method stub
-		
+		$this->_sql   =  $this->_dbName.'.getCollenctionNames()';
+		$list   = $this->_mongo->listCollections();
+		$info =  [];
+		foreach ($list as $collection){
+			$info[]   =  $collection->getName();
+		}
+		return $info;
 	}
 
 }

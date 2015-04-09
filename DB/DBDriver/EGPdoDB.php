@@ -98,7 +98,7 @@ class EGPdoDB extends EGADB{
 	}
 	
 	
-	public function distanct($options = array()) {
+	public function distinct($options = array()) {
 		// TODO Auto-generated method stub
 	
 	}

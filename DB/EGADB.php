@@ -16,6 +16,15 @@ abstract class EGADB implements EGIDB{
 	 */
 	protected $_handler;
 	
+	/**
+	 * sql语句
+	 * @var unknown
+	 */
+	protected $_sql='';
+	
+	protected $_dbErr;
+	protected $_lastId;
+	
 	
 	/**
 	 * 解析配置文件

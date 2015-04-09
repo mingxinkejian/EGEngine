@@ -98,7 +98,7 @@ interface EGIDB {
 	 * 列出不同值
 	 * @param unknown $options
 	 */
-	public function distanct($options=array());
+	public function distinct($options=array());
 	/**
 	 * 释放查询结果
 	 */

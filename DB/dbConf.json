@@ -1,6 +1,7 @@
 {
   "dbType": "mongoDB",
   "mongoDB": {
+  "connType":"multi",
     "username": "",
     "password": "",
     "hostname": [
@@ -14,6 +15,7 @@
     "options": {}
   },
   "mysqlDB": {
+  	"connType":"multi",
     "username": "",
     "password": "",
     "hostname": [
