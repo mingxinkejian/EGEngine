@@ -5,31 +5,16 @@ namespace DB\DBDriver;
 use DB\EGADB;
 class EGPdoDB extends EGADB{
 	
-	/**
-	 * 连接数据库
-	 */
-	public function connection(){
+	
+	public function connection($config, $connId = 0) {
 		// TODO Auto-generated method stub
-		if ($this->_config['connType']=='multi'){
-			$this->multipleConnection();
-		}else{
-			$this->singleConnection();
-		}
+	
 	}
 	
-	/* 
-	 * 单台服务器连接
-	 * @see \DB\EGIDB::initConnection()
-	 */
-	public function singleConnection(){
-	}
 	
-	/* 
-	 * 主库写，从库读
-	 * @see \DB\EGIDB::multipleConnection()
-	 */
-	public function multiConnection(){
-		
+	public function multiConnection($isMaster = true) {
+		// TODO Auto-generated method stub
+	
 	}
 	
 	public function selectDB($dbName) {

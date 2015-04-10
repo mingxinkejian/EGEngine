@@ -3,21 +3,23 @@
 namespace DB;
 
 interface EGIDB {
+	
+	/**
+	 * 初始化数据库连接
+	 * @param string $isMaster
+	 */
+	public function initConnection($isMaster=true);
+	
 	/**
 	 * 连接数据库
 	 */
-	public function connection();
-	
-	/**
-	 * 单台数据库连接
-	 */
-	public function singleConnection();
+	public function connection($config,$connId=0);
 	
 	/**
 	 * 默认采用主库写，从库读，可以在配置文件中设置
 	 * 分布式数据库连接
 	 */
-	public function multiConnection();
+	public function multiConnection($isMaster=true);
 	
 	/**
 	 * 选择默认数据库

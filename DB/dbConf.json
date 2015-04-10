@@ -1,16 +1,17 @@
 {
   "dbType": "mongoDB",
   "mongoDB": {
-  "connType":"multi",
+  	"connType":"multi",
     "username": "",
     "password": "",
-    "hostname": [
+    "rwSeparate":true,
+    "hostName": [
       "127.0.0.1",
       "127.0.0.2",
       "127.0.0.3"
     ],
     "masterName": "127.0.0.1",
-    "hostport": 27017,
+    "hostPort": 27017,
     "database": "testMongo",
     "options": {}
   },
@@ -18,13 +19,14 @@
   	"connType":"multi",
     "username": "",
     "password": "",
-    "hostname": [
+    "rwSeparate":true,
+    "hostName": [
       "127.0.0.1",
       "127.0.0.2",
       "127.0.0.3"
     ],
     "masterName": "127.0.0.1",
-    "hostport": 3306,
+    "hostPort": 3306,
     "database": "testMongo",
     "options": {}
   }

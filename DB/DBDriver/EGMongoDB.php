@@ -15,46 +15,53 @@ class EGMongoDB extends EGADB {
 	
 	public function __construct($config) {
 	    if (!extension_loaded('mongoClient')){
-	        echo 'can not found mongoClient';
+	        echo "can not found mongoClient \n";
 	        return ;
 	    }
 	    if(empty($config)){
-	        echo 'config is null,please confirm config';
+	        echo "config is null,please confirm config \n";
 	        return ;
 	    }
 		$this->_config = $this->parseConfig ( $config );
 	}
-	/**
-	 * 连接数据库
-	 */
-	public function connection(){
+
+	public function connection($config,$connId=0){
 		// TODO Auto-generated method stub
-		if ($this->_config['connType']=='multi'){
-			$this->multipleConnection();
+		$host = 'mongodb://'.($config['username']?"{$config['username']}":'').($config['password']?":{$config['password']}@":'').$config['masterName'].($config['hostPort']?":{$config['hostPort']}":'').'/'.($config['database']?"{$config['database']}":'');
+		try{
+			$this->_handlerList[$connId] = new \mongoClient( $host,$config['options']);
+		}catch (\MongoConnectionException $e){
+			echo "connect mongoClient failed :".$e->getMessage()."\n";
+		}
+		return $this->_handlerList[$connId];
+	}
+	
+	/* 
+	 * 分布式连接数据库，可以使用主从分离，主数据库写，从数据库读
+	 */
+	public function multiConnection($isMaster = true) {
+		// TODO Auto-generated method stub
+		//是否读写分离
+		$masterIndex=0;
+		if ($this->_config['rwSeparate']){
+			if ($isMaster){
+				$slaveIndex=$masterIndex;
+			}else{
+				// 读操作连接从服务器
+				$slaveIndex = floor(mt_rand(1,count($this->_config['hostName'])-1));   // 每次随机连接的数据库
+			}
 		}else{
-			$this->singleConnection();
+			// 读写操作不区分服务器，每次随机连接的数据库
+			$slaveIndex = floor(mt_rand(0,count($this->_config['hostName'])-1));
 		}
-	}
-	
-	/* 
-	 * 单台服务器连接
-	 * @see \DB\EGIDB::initConnection()
-	 */
-	public function singleConnection(){
-		$hostName = 'mongodb://'.($this->_config['username']?"{$this->_config['username']}":'').($this->_config['password']?":{$this->_config['password']}@":'').$this->_config['masterName'].($this->_config['hostport']?":{$this->_config['hostport']}":'').'/'.($this->_config['database']?"{$this->_config['database']}":'');
-		try {
-			$this->_handler= new \mongoClient( $hostName,$this->_config['options']);
-		} catch (\MongoConnectionException $e) {
-			echo $e->getMessage();
-		}
-	}
-	
-	/* 
-	 * 主库写，从库读
-	 * @see \DB\EGIDB::multipleConnection()
-	 */
-	public function multiConnection(){
+		$config['username']=$this->_config['username'];
+		$config['password']=$this->_config['password'];
+		$config['masterName']=$this->_config['hostName'][$slaveIndex];
+		$config['hostPort']=$this->_config['hostPort'];
+		$config['database']=$this->_config['database'];
+		$config['options']=$this->_config['options'];
 		
+		return $this->connection($config);
 	}
 
 	/**
@@ -62,11 +69,12 @@ class EGMongoDB extends EGADB {
 	 * @param string $collection
 	 * @param string $dbName
 	 */
-	public function switchCollection($collection,$dbName=''){
+	public function switchCollection($collection,$dbName='',$isMaster=true){
 	    if (!$this->_handler){
-	    	$this->connection();
+	    	$this->initConnection($isMaster);
 	    }
 	    try {
+	    	//如果dbName不为空的话切换数据库
 	    	if (empty($dbName)){
 	    		// 当前MongoDb对象
 	    		$this->_dbName  =  $dbName;
@@ -122,31 +130,70 @@ class EGMongoDB extends EGADB {
 
 	public function insert($data, $options = array(), $replace = false) {
 		// TODO Auto-generated method stub
+		$this->queryStr   =  $this->_dbName.'.'.$this->_collectionName.'.insert(';
+		$this->queryStr   .= $data?json_encode($data):'{}';
+		$this->queryStr   .= ')';
 		
+		try {
+			$result =  $replace?   $this->_collection->save($data):  $this->_collection->insert($data);
+			if($result) {
+				$_id    = $data['_id'];
+				if(is_object($_id)) {
+					$_id = $_id->__toString();
+				}
+				$this->_lastId  = $_id;
+			}
+			return $result;
+		} catch (\MongoCursorException $e) {
+			echo $e->getMessage();
+		}
 	}
 
 
-	public function insertArray($dataSet, $options = array(), $replace = false) {
+	public function insertArray($dataList, $options = array(), $replace = false) {
 		// TODO Auto-generated method stub
-		
+		try {
+			$result =  $this->_collection->batchInsert($dataList);
+			return $result;
+		} catch (\MongoCursorException $e) {
+			echo $e->getMessage();
+		}
+
 	}
 
 
 	public function selectInsert($fields, $table, $options = array()) {
 		// TODO Auto-generated method stub
-		
+		echo 'mongoDB have not selectInsert';
 	}
 
 
 	public function update($data, $options = array()) {
 		// TODO Auto-generated method stub
-		
+		try {
+			$multiple   =   $options['multiple'];
+			unset($options);
+			$this->queryStr   =  $this->_dbName.'.'.$this->_collectionName.'.update(';
+			$this->queryStr   .= $options?json_encode($options):'{}';
+			$this->queryStr   .=  ','.json_encode($data).')';
+			
+			$result   = $this->_collection->update($options,$data,$multiple);
+			return $result;
+		} catch (\MongoCursorException $e) {
+			echo $e->getMessage();
+		}
 	}
 
 
 	public function delete($options = array()) {
 		// TODO Auto-generated method stub
-		
+		try{
+			$this->queryStr   =  $this->_dbName.'.'.$this->_collectionName.'.remove('.json_encode($options).')';
+			$result   = $this->_collection->remove($options);
+			return $result;
+		} catch (\MongoCursorException $e) {
+			echo $e->getMessage();
+		}
 	}
 
 
@@ -163,6 +210,10 @@ class EGMongoDB extends EGADB {
 
 	public function select($options = array()) {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	public function findAndModify($options=array()){
 		
 	}
 
