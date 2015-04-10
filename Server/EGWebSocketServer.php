@@ -42,11 +42,20 @@ class EGWebSocketServer extends EGWebServer{
 	}
 	
 	public function onOpen(\swoole_websocket_server $server,$fd){
-		
+		echo "client {$fd} open\n";
 	}
 	
 	public function onRequest(\swoole_http_request $request,\swoole_http_response $response){
+		$response->header('Server', self::SEVERNAME);
+		ob_start();
 		
+		$output=ob_get_contents();
+		ob_end_clean();
+		if (is_null($output)){
+			$response->end();
+		}else{
+			$response->end($output);
+		}
 	}
 
 	/**
