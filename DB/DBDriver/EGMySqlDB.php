@@ -23,71 +23,6 @@ class EGMySqlDB extends EGADB{
 	}
 
 
-	public function query($sql, $fetchSql = false) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function execute($sql, $fetchSql = false) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function insert($data, $options = array(), $replace = false) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function insertArray($dataSet, $options = array(), $replace = false) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function selectInsert($fields, $table, $options = array()) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function update($data, $options = array()) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function delete($options = array()) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function clearTable($options = array()) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function select($options = array()) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function count($options = array()) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function distinct($options = array()) {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 	public function freeResult() {
 		// TODO Auto-generated method stub
@@ -102,18 +37,6 @@ class EGMySqlDB extends EGADB{
 
 
 	public function getDBError() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function getLastSql() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public function getLastId() {
 		// TODO Auto-generated method stub
 		
 	}
