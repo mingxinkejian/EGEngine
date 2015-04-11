@@ -16,23 +16,7 @@ class EGHttpServer extends EGWebServer{
 			$this->_server->setGlobal(HTTP_GLOBAL_ALL,HTTP_GLOBAL_GET | HTTP_GLOBAL_POST);
 		}
 	}
-	
-	public function loadConfig($fileName) {
-		// TODO Auto-generated method stub
-		$config=array();	
-		if (empty($config)){
-			$config=array(
-					'worker_num' => 4,
-					'daemonize' => false,
-					'max_request' => 10000,
-					'dispatch_mode' => 1
-			);
-		}
-		$this->_config=$config;
 		
-		$this->_server->set($config);
-	}
-	
 	
 	public function onStart($server) {
 		// TODO Auto-generated method stub

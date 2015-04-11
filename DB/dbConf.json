@@ -7,12 +7,12 @@
     "rwSeparate":true,
     "hostName": [
       "127.0.0.1",
-      "127.0.0.2",
-      "127.0.0.3"
+      "127.0.0.1",
+      "127.0.0.1"
     ],
     "masterName": "127.0.0.1",
     "hostPort": 27017,
-    "database": "testMongo",
+    "database": "gameManager",
     "options": {}
   },
   "mysqlDB": {
@@ -22,8 +22,8 @@
     "rwSeparate":true,
     "hostName": [
       "127.0.0.1",
-      "127.0.0.2",
-      "127.0.0.3"
+      "127.0.0.1",
+      "127.0.0.1"
     ],
     "masterName": "127.0.0.1",
     "hostPort": 3306,

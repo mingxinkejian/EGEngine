@@ -11,17 +11,17 @@ class EGDBFactory {
 	static $_instances=array();
 	static $_configs=array();
 	
-	public static function getInstance($config,$type=self::DBTYPE_MYSQL){
-		if (empty($config)){
+	public static function getInstance($configData,$type=self::DBTYPE_MYSQL){
+		if (empty($configData)){
 			return null;
 		}
+		$md5    =   md5(serialize($configData));
+		$name = $md5;
 		
-		$name = $config['dbType'];
-		
-		if (empty(self::$_instances[$name])){
+		if (!isset(self::$_instances[$name])){
 			$class  =   strpos($type,'\\')? $type : 'DB\\DBDriver\\EG'.$type;
-			$instance=new $class($config);	
-			self::$_configs[$name]=$config;
+			$instance=new $class($configData);	
+			self::$_configs[$name]=$configData;
 			self::$_instances[$name]=$instance;
 		}
 		

@@ -17,7 +17,7 @@ abstract class EGBaseServer implements EGIServer{
 	 * 读取配置文件，在对应服务器的子类中覆盖
 	 * @param unknown $fileName
 	 */
-	public function loadConfig($fileName){}
+	public function loadConfig($config){}
 	/**
 	 * 启动服务器
 	 */

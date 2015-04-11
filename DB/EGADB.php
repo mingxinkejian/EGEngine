@@ -1,8 +1,6 @@
 <?php
 
 namespace DB;
-
-use ConfigReader\EGJson;
 abstract class EGADB implements EGIDB{
 
 	/**
@@ -14,7 +12,7 @@ abstract class EGADB implements EGIDB{
 	 * 数据库操作句柄
 	 * @var unknown
 	 */
-	protected $_handler;
+	protected $_handler=null;
 	
 	/**
 	 * 连接数组，可以保持多个连接
@@ -42,7 +40,7 @@ abstract class EGADB implements EGIDB{
 			
 			$this->_handler=$this->multiConnection($isMaster);
 		}else{
-			if ( !$this->_handler ){
+			if (!$this->_handler ){
 				$this->_handler=$this->connection($this->_config);
 			}
 		}
@@ -52,11 +50,22 @@ abstract class EGADB implements EGIDB{
 	 * 解析配置文件
 	 * @param unknown $config
 	 */
-	public function parseConfig($configName){
-	    $configData = EGJson::parse ( $configName );
+	public function parseConfig($configData){
 	    $dbType=$configData['dbType'];
-	    $this->_config=$configData[$dbType];
+	    return $configData[$dbType];
 	}
+	
+	public function getLastSql() {
+		// TODO Auto-generated method stub
+		return $this->_sql;
+	}
+	
+	
+	public function getLastId() {
+		// TODO Auto-generated method stub
+		return $this->_lastId;
+	}
+	
 
 	/**
 	 * 魔术方法—调用DB对应的特定方法
@@ -71,5 +80,14 @@ abstract class EGADB implements EGIDB{
 		}else{
 			return;
 		}
+	}
+	
+	public function __destruct(){
+		// 释放查询
+		if ($this->_handler){
+			$this->freeResult();
+		}
+		// 关闭连接
+		$this->close();
 	}
 }
