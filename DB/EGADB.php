@@ -51,8 +51,7 @@ abstract class EGADB implements EGIDB{
 	 * @param unknown $config
 	 */
 	public function parseConfig($configData){
-	    $dbType=$configData['dbType'];
-	    return $configData[$dbType];
+	    return $configData;
 	}
 	
 	public function getLastSql() {

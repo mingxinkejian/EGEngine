@@ -14,7 +14,7 @@ include WEB_ROOT . 'DB/DBDriver/EGMongoDB.php';
 
 $configPath = WEB_ROOT . 'DB'.DS . 'dbConf.json';
 $jsonConfData=EGJson::parse($configPath);
-$mongoDb=EGDBFactory::getInstance($jsonConfData,EGDBFactory::DBTYPE_MONGODB);
+$mongoDb=EGDBFactory::getInstance($jsonConfData['mongoDB'],EGDBFactory::DBTYPE_MONGODB);
 $mongoDb->switchCollection('t_admin','gameManager');
 $mongoDb->select('t_admin');
 $cursor=$mongoDb->limit(1,0);
