@@ -25,8 +25,8 @@ class EGWebSocketServer extends EGWebServer{
 		echo "webSocketServer start\n";
 	}
 	
-	public function onOpen(\swoole_websocket_server $server,$fd){
-		echo "client {$fd} open\n";
+	public function onOpen(\swoole_websocket_server $server,\swoole_http_request $request){
+		echo "client {$request->fd} open\n";
 	}
 	
 	public function onRequest(\swoole_http_request $request,\swoole_http_response $response){
@@ -42,26 +42,17 @@ class EGWebSocketServer extends EGWebServer{
 		}
 	}
 
+
 	/**
-	 * @param unknown $server
-	 * @param unknown $fd
-	 * @param unknown $data
-	 * @param unknown $opcode OPCODE_TEXT_FRAME = 0x1 ，文本数据 OPCODE_BINARY_FRAME = 0x2 ，二进制数据
-	 * @param unknown $fin
+	 * 接收到来自客户端的消息
+	 * @param \swoole_websocket_server $server
+	 * @param unknown $frame
 	 */
-	public function onMessage(\swoole_websocket_server $server,$data,$opcode, $fin){
-		$connections = $server->connection_list();
-	    foreach($connections as $fd)
-	    {
-	        $info = $server->connection_info($fd);
-	        if ($fd != $data->fd and $info['websocket_status'] > 1)
-	        {
-	            $server->push($fd, $data->data);
-	        }
-	    }
+	public function onMessage(\swoole_websocket_server $server,$frame){
+		echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
 	}
 	
-	public function onClose(\swoole_websocket_server $server, $clientId, $fromId){
+	public function onClose(\swoole_websocket_server $server, $fromId){
 		echo "client {$fromId} closed\n";
 	}
 }

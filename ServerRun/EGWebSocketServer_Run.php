@@ -18,7 +18,7 @@ include WEB_ROOT . 'Server/EGWebSocketServer.php';
 $configPath = __DIR__ . DS . 'serverConf.json';
 $configData = EGJson::parse ( $configPath );
 
-$httpServer = new EGWebSocketServer( '127.0.0.1', 9502 );
-$httpServer->loadConfig ( $configData ['webSocketServer'] );
-$httpServer->setWebRoot ( WEB_ROOT );
-$httpServer->startServer ();
+$wsServer = new EGWebSocketServer( '127.0.0.1', 9502 );
+$wsServer->loadConfig ( $configData ['webSocketServer'] );
+$wsServer->setWebRoot ( WEB_ROOT );
+$wsServer->startServer ();

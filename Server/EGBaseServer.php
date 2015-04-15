@@ -12,7 +12,13 @@ abstract class EGBaseServer implements EGIServer{
 	public function setLogger($logger) {
 		$this->_logger = $logger;
 	}
-	
+	/**
+	 * 服务器日志打印
+	 * @param string $logMsg
+	 */
+	public function printLog($logMsg=''){
+		$this->_logger->log($logMsg);
+	}
 	/**
 	 * 读取配置文件，在对应服务器的子类中覆盖
 	 * @param unknown $fileName
@@ -24,6 +30,14 @@ abstract class EGBaseServer implements EGIServer{
 	public function startServer(){
 		$this->_server->start();
 	}
+	
+	/**
+	 * 获取服务器实例
+	 */
+	public function getServer(){
+		return $this->_server;
+	}
+	
 	/**
 	 * 启动
 	 *
