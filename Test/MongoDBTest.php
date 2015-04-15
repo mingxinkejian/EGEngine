@@ -5,7 +5,7 @@ use ConfigReader\EGJson;
 define ( 'TEST_ROOT', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR );
 
 // 为方便起见，使用autoload自动加载
-require TEST_ROOT . 'requireEGEngine.php';
+include TEST_ROOT . 'requireEGEngine.php';
 
 $configPath = TEST_ROOT . 'Cache' . DIRECTORY_SEPARATOR . 'cacheConfig.json';
 $jsonConfData = EGJson::parse ( $configPath );
