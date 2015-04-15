@@ -6,7 +6,8 @@
         "port": 6379,
         "isMaster": true,
         "conType": "pconnect",
-        "auth": []
+        "auth": [],
+        "expire":3600
     },
     "Memcached": {
         "host": [
@@ -15,6 +16,7 @@
         "port": 6379,
         "isMaster": true,
         "conType": "pconnect",
-        "auth": []
+        "auth": [],
+        "expire":3600
     }
 }

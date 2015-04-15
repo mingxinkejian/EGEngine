@@ -48,21 +48,21 @@ class EGRedis extends EGABaseCache{
 	 * 数据会进行序列化处理，目前暂只支持json序列化，后期会加入其他序列化方式
 	 * @see \Cache\EGABaseCache::addCache()
 	 */
-	public function addCache($key, $value, $expire) {
+	public function addCache($key, $value, $expire=0 ) {
 		// TODO Auto-generated method stub
-		$this->setCache($key, $value, $expire);
+		return $this->setCache($key, $value, $expire);
 	}
 
 
-	public function setCache($key, $value, $expire ) {
+	public function setCache($key, $value, $expire=0 ) {
 		// TODO Auto-generated method stub
 		if($expire==0) {
-			$expire  =  $this->_config['expire'];
+			$expire  =  isset($this->_config['expire'])? $this->_config['expire']: 0;
 		}
 		//对数组/对象数据进行缓存处理，保证数据完整性
 		$value  =  (is_object($value) || is_array($value)) ? json_encode($value) : $value;
 		if($expire > 0) {
-			$result = $this->_handler->setnx($key, $expire, $value);
+			$result = $this->_handler->setex($key, $expire, $value);
 		}else{
 			$result = $this->_handler->set($key, $value);
 		}

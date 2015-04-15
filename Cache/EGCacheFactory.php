@@ -12,18 +12,19 @@ class EGCacheFactory {
 	 * 
 	 * @param unknown $type        	
 	 */
-	public static function getInstance($config,$type = self::REDIS) {
-		if (empty($config)){
+	public static function getInstance($configData,$type = self::REDIS) {
+		if (empty($configData)){
 			return null;
 		}
-		$name = $config['name'];		
+		$md5    =   md5(serialize($configData));
+		$name = $md5;
 		
 		if (empty(self::$_instances[$name])){
 			$class  =   strpos($type,'\\')? $type : 'Cache\\CacheDriver\\EG'.$type;
 			$instance=new $class();
-			$instance->connection($config);
+			$instance->connection($configData);
 			
-			self::$_configs[$name]=$config;
+			self::$_configs[$name]=$configData;
 			self::$_instances[$name]=$instance;
 		}
 
