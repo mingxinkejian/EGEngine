@@ -30,11 +30,7 @@ class EGHttpServer extends EGWebServer{
 	
 		$output=ob_get_contents();
 		ob_end_clean();
-		if (is_null($output)){
-			$response->end();
-		}else{
-			$response->end($output);
-		}
+		$response->end($output);
 	
 	}
 }
