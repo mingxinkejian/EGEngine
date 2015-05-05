@@ -39,6 +39,18 @@ abstract class EGBaseServer implements EGIServer{
 	}
 	
 	/**
+	 * 添加监听的地址和端口
+	 * @param unknown $host
+	 * @param unknown $port
+	 * @param string $type
+	 */
+	public function addListener($host,$port,$type=SWOOLE_SOCK_TCP){
+		if ($this->_server){
+			$this->_server->addListener($host, $port,$type);
+		}
+	}
+	
+	/**
 	 * 启动
 	 *
 	 * @param unknown $server
