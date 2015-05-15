@@ -87,7 +87,7 @@ abstract class EGBaseServer implements EGIServer{
 	 * @param unknown $fromId
 	*/
 	public function onClose($server, $clientId, $fromId){
-		
+		echo "client {$fromId} closed\n";
 	}
 	/**
 	 * 停止
