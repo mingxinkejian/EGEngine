@@ -9,6 +9,7 @@ EGLoader::addNameSpace('Cache', $REQUIRE_PATH.'Cache');
 EGLoader::addNameSpace('Core', $REQUIRE_PATH.'Core');
 EGLoader::addNameSpace('DB', $REQUIRE_PATH.'DB');
 EGLoader::addNameSpace('Server', $REQUIRE_PATH.'Server');
+EGLoader::addNameSpace('Log', $REQUIRE_PATH.'Log');
 EGLoader::addNameSpace('ServerRun', $REQUIRE_PATH.'ServerRun');
 //注册装载器
 EGLoader::register();

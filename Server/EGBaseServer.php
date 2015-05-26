@@ -17,7 +17,7 @@ abstract class EGBaseServer implements EGIServer{
 	 * @param string $logMsg
 	 */
 	public function printLog($logMsg=''){
-		$this->_logger->log($logMsg);
+		$this->_logger->printLog($logMsg);
 	}
 	/**
 	 * 读取配置文件，在对应服务器的子类中覆盖
@@ -87,7 +87,7 @@ abstract class EGBaseServer implements EGIServer{
 	 * @param unknown $fromId
 	*/
 	public function onClose($server, $clientId, $fromId){
-		echo "client {$fromId} closed\n";
+		$this->printLog("client {$fromId} closed");
 	}
 	/**
 	 * 停止
@@ -96,5 +96,11 @@ abstract class EGBaseServer implements EGIServer{
 	*/
 	public function onShutdown($server){
 		
+	}
+	/*
+	 * 添加监听的回调函数
+	 */
+	public function addFuncCallBack($method,$callback){
+		$this->_server->on($method,$callback);
 	}
 }
