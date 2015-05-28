@@ -24,20 +24,20 @@ class EGLog {
 	}
 	
 	public function debug($debugMsg){
-		$logMsg="[DEBUG] ".date('Y-M-d H:i:s').$debugMsg;
+		$logMsg="[DEBUG] ".date('Y-M-d H:i:s').' '.$debugMsg;
 		$this->_logger->write($logMsg);
 	}
 	
 	public function warn($warnMsg){
-		$logMsg="[WARN] ".date('Y-M-d H:i:s').$warnMsg;
+		$logMsg="[WARN] ".date('Y-M-d H:i:s').' '.$warnMsg;
 		$this->_logger->write($logMsg);
 	}
 	public function error($errorMsg){
-		$logMsg="[ERROR] ".date('Y-M-d H:i:s').$errorMsg;
+		$logMsg="[ERROR] ".date('Y-M-d H:i:s').' '.$errorMsg;
 		$this->_logger->write($logMsg);
 	}
 	public function info($infoMsg){
-		$logMsg="[INFO] ".date('Y-M-d H:i:s').$infoMsg;
+		$logMsg="[INFO] ".date('Y-M-d H:i:s').' '.$infoMsg;
 		$this->_logger->write($logMsg);
 	}
 }

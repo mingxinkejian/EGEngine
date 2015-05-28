@@ -25,6 +25,6 @@ class EGLogFile {
 		if (is_file ( $destination ) && floor ( $this->_fileSize ) <= filesize ( $destination )) {
 			rename ( $destination, dirname ( $destination ) . '/' . time () . '-' . basename ( $destination ) );
 		}
-		error_log ( "[{$now}] " . $_SERVER ['REMOTE_ADDR'] . ' ' . $_SERVER ['REQUEST_URI'] . "\r\n{$log}\r\n", 3, $destination );
+		error_log ( "[{$now}] " . "{$log}\r\n", 3, $destination );
 	}
 }
