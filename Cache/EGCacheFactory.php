@@ -35,17 +35,27 @@ class EGCacheFactory {
 	 * @param unknown $names
 	 */
 	public static function destoryInstance($names = array()) {
-		if (empty ( self::$_instances )) {
+		if (empty(self::$_instances)) {
 			return true;
 		}
-		
-		if (empty($names)){
-			return true;
-		}
-		
-		foreach ($names as $name) {
-			unset(self::$_instances[$name]);
-			unset(self::$_configs[$name]);
+		if (empty($names)) {
+			foreach (self::$_instances as $name => $redis) {
+				if (self::$_configs[$name]['persistent']) {
+					continue;
+				}
+				$redis->close();
+				unset(self::$_configs[$name]);
+			}
+		} else {
+			foreach ($names as $name) {
+				if (isset(self::$_instances[$name])) {
+					if (self::$_configs[$name]['persistent']) {
+						continue;
+					}
+					self::$_instances[$name]->close();
+					unset(self::$_configs[$name]);
+				}
+			}
 		}
 		return true;
 	}
