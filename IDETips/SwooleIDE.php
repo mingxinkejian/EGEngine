@@ -1294,7 +1294,15 @@ class swoole_websocket_server extends swoole_http_server
 	 */
 	function push($fd, $data, $binary_data = false, $finish = true) {}
 }
-
+/*
+ * websocket frame 数据帧
+ */
+class swoole_websocket_frame{
+	public $fd;
+	public $data;
+	public $opcode;
+	public $finish;
+}
 /**
  * Http请求对象
  * Class swoole_http_request

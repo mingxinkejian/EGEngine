@@ -90,7 +90,7 @@ class EGWebSocketServer extends EGWebServer{
 	 * @param \swoole_websocket_server $server
 	 * @param unknown $frame
 	 */
-	public function onMessage(\swoole_websocket_server $server,$frame){
+	public function onMessage(\swoole_websocket_server $server,\swoole_websocket_frame $frame){
 // 		echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
 	}
 	

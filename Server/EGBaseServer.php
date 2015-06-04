@@ -12,6 +12,9 @@ abstract class EGBaseServer implements EGIServer{
 	public function setLogger($logger) {
 		$this->_logger = $logger;
 	}
+	public function getLogger(){
+		return $this->_logger;
+	}
 	/**
 	 * 服务器日志打印
 	 * @param string $logMsg
