@@ -98,7 +98,7 @@ class EGWebSocketServer extends EGWebServer{
 	 * 关闭连接
 	 */
 	public function close($fd,$from_id = 0){
-		$this->_server->close($fd,$from_id);
+		$this->_server->close($fd);
 	}
 	
 	/*
