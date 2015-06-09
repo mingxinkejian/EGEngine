@@ -12,6 +12,7 @@ abstract class EGBaseServer implements EGIServer{
 	public function setLogger($logger) {
 		$this->_logger = $logger;
 	}
+	
 	public function getLogger(){
 		return $this->_logger;
 	}
@@ -69,7 +70,7 @@ abstract class EGBaseServer implements EGIServer{
 	 * @param unknown $fromId
 	*/
 	public function onConnect($server, $clientId, $fromId){
-		
+		$this->printLog("clientId:{$clientId} connect!");
 	}
 	/**
 	 * 接收

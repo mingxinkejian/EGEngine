@@ -94,4 +94,17 @@ class EGWebSocketServer extends EGWebServer{
 // 		echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
 	}
 	
+	/*
+	 * 关闭连接
+	 */
+	public function close($fd,$from_id = 0){
+		$this->_server->close($fd,$from_id);
+	}
+	
+	/*
+	 * 封装推送消息接口
+	 */
+	public function push($fd, $data, $binary_data = false, $finish = true){
+		$this->_server->push($fd, $data,$binary_data,$finish);
+	}
 }
