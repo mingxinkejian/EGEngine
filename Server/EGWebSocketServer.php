@@ -30,9 +30,13 @@ class EGWebSocketServer extends EGWebServer{
 // 		swoole_set_process_name('EGServer_worker');
 		$this->printLog( "WorkerStart: MasterPid={$server->master_pid}|Manager_pid={$server->manager_pid}|WorkerId={$server->worker_id}|WorkerPid={$server->worker_pid}");
 	}
-
+	/**
+	 * 当WebSocket客户端与服务器建立连接并完成握手后会回调此函数
+	 * @param \swoole_websocket_server $server
+	 * @param \swoole_http_request $request
+	 */
 	public function onOpen(\swoole_websocket_server $server,\swoole_http_request $request){
-		$this->printLog(  "client {$request->fd} open");
+		$this->getLogger()->info(  "client {$request->fd} open");
 	}
 	
 	public function onRequest(\swoole_http_request $request,\swoole_http_response $response){
@@ -45,6 +49,7 @@ class EGWebSocketServer extends EGWebServer{
 		
 	}
 	/**
+	 * 设置onHandShake回调函数后不会再触发onOpen事件，需要应用代码自行处理
 	 * 自定定握手规则，没有设置则用系统内置的（只支持version:13的）
 	 * @param \swoole_http_request $request
 	 * @param \swoole_http_response $response
