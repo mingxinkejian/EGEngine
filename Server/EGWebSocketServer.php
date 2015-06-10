@@ -102,14 +102,14 @@ class EGWebSocketServer extends EGWebServer{
 	/*
 	 * 关闭连接
 	 */
-	public function close($fd,$from_id = 0){
+	public function wsClose($fd,$from_id = 0){
 		$this->_server->close($fd);
 	}
 	
 	/*
 	 * 封装推送消息接口
 	 */
-	public function push($fd, $data, $binary_data = false, $finish = true){
+	public function wsPush($fd, $data, $binary_data = false, $finish = true){
 		$this->_server->push($fd, $data,$binary_data,$finish);
 	}
 }
