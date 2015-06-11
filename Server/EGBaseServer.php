@@ -39,6 +39,21 @@ class EGBaseServer {
 	 * @param unknown $fileName        	
 	 */
 	public function loadConfig($config) {
+		if (empty($config)){
+			$config=array(
+					//工作进程
+					'worker_num' => 4,
+					//是否守护进程
+					'daemonize' => false,
+					//最大请求数
+					'max_request' => 10000,
+					//工作模式
+					'dispatch_mode' => 1
+			);
+		}
+		$this->_config=$config;
+		
+		$this->_server->set($config);
 	}
 	/**
 	 * 启动服务器
