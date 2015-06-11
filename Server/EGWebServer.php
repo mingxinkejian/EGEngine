@@ -1,12 +1,13 @@
 <?php
 
 namespace Server;
-
+/*
+ * webServer 子类为httpServer或websocketServer
+ */
 class EGWebServer extends EGBaseServer{
-	const SERVERNAME ='EGEServer';
+	const SERVERNAME ='EGWebServer';
 	
 	protected $_webRoot;
-	
 	
 	public function setWebRoot($webRoot){
 		$this->_webRoot=$webRoot;
@@ -43,5 +44,4 @@ class EGWebServer extends EGBaseServer{
 		ob_end_clean();
 		$response->end($output);
 	}
-	public function onClose($server, $clientId, $fromId){}
 }
