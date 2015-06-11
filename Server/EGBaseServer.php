@@ -9,12 +9,17 @@ abstract class EGBaseServer {
 	protected $_logger;
 	protected $_config;
 	
-	public function setLogger($logger) {
-		$this->_logger = $logger;
-	}
+	protected $_debug=false;
 	
 	public function getLogger(){
 		return $this->_logger;
+	}
+	/**
+	 * 设置debug
+	 * @param string $debug
+	 */
+	public function setDebug($debug=false){
+		$this->_debug=$debug;
 	}
 	/**
 	 * 服务器日志打印
@@ -53,53 +58,35 @@ abstract class EGBaseServer {
 			$this->_server->addListener($host, $port,$type);
 		}
 	}
+	/**
+	 *
+	 * @param $server
+	 * @param $clientId 是连接的文件描述符
+	 * @param $fromId 来自那个reactor线程
+	 */
+	public abstract function onClose($server, $clientId, $fromId);
+	/**
+	 * 工作进程
+	 * @param $server
+	 * @param $workerId
+	 */
+	public function onWorkerStart($server,$workerId){
+		// 		swoole_set_process_name('EGServer_worker');
+		if ($this->_debug){
+			$this->_logger->debug( "WorkerStart: MasterPid={$server->master_pid}|Manager_pid={$server->manager_pid}|WorkerId={$server->worker_id}|WorkerPid={$server->worker_pid}");
+		}
+		
+	}
 	
-	/**
-	 * 启动
-	 *
-	 * @param unknown $server
-	*/
-	public function onStart($server){
-		
-	}
-	/**
-	 * 连接
-	 *
-	 * @param unknown $server
-	 * @param unknown $clientId
-	 * @param unknown $fromId
-	*/
-	public function onConnect($server, $clientId, $fromId){
-		$this->printLog("clientId:{$clientId} connect!");
-	}
-	/**
-	 * 接收
-	 *
-	 * @param unknown $server
-	 * @param unknown $clientId
-	 * @param unknown $fromId
-	 * @param unknown $data
-	*/
-	public function onReceive($server, $clientId, $fromId, $data){
-		
-	}
-	/**
-	 * 关闭
-	 *
-	 * @param unknown $server
-	 * @param unknown $clientId
-	 * @param unknown $fromId
-	*/
-	public function onClose($server, $clientId, $fromId){
-		$this->printLog("client {$fromId} closed");
-	}
 	/**
 	 * 停止
 	 *
 	 * @param unknown $server
 	*/
 	public function onShutdown($server){
-		
+		if ($this->_debug){
+			$this->_logger->debug("server shutdown");
+		}
 	}
 	/*
 	 * 添加监听的回调函数

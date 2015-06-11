@@ -2,7 +2,7 @@
 
 namespace Server;
 
-class EGWebSocketServer extends EGWebServer{
+abstract class EGWebSocketServer extends EGWebServer{
 	
 	
 	public function __construct($host,$port,$logger,$isSetGlobal=true){
@@ -10,8 +10,7 @@ class EGWebSocketServer extends EGWebServer{
 			echo "please confirm the params !\n";
 			exit();
 		}
-		$this->setLogger($logger);
-		
+		$this->_logger=$logger;
 		$this->_defaultHost=$host;
 		$this->_defaultPort=$port;
 		$this->_server=new \swoole_websocket_server($host, $port);
@@ -26,28 +25,13 @@ class EGWebSocketServer extends EGWebServer{
 		$this->printLog('webSocketServer start');
 	}
 	
-	public function onWorkerStart(\swoole_server $server,$workerId){
-// 		swoole_set_process_name('EGServer_worker');
-		$this->printLog( "WorkerStart: MasterPid={$server->master_pid}|Manager_pid={$server->manager_pid}|WorkerId={$server->worker_id}|WorkerPid={$server->worker_pid}");
-	}
 	/**
 	 * 当WebSocket客户端与服务器建立连接并完成握手后会回调此函数
 	 * @param \swoole_websocket_server $server
 	 * @param \swoole_http_request $request
 	 */
-	public function onOpen(\swoole_websocket_server $server,\swoole_http_request $request){
-		$this->getLogger()->info(  "client {$request->fd} open");
-	}
+	public abstract function onOpen(\swoole_websocket_server $server,\swoole_http_request $request);
 	
-	public function onRequest(\swoole_http_request $request,\swoole_http_response $response){
-		$response->header('Server', self::SERVERNAME);
-		ob_start();
-		
-		$output=ob_get_contents();
-		ob_end_clean();
-		$response->end($output);
-		
-	}
 	/**
 	 * 设置onHandShake回调函数后不会再触发onOpen事件，需要应用代码自行处理
 	 * 自定定握手规则，没有设置则用系统内置的（只支持version:13的）
@@ -95,9 +79,7 @@ class EGWebSocketServer extends EGWebServer{
 	 * @param \swoole_websocket_server $server
 	 * @param unknown $frame
 	 */
-	public function onMessage(\swoole_websocket_server $server,\swoole_websocket_frame $frame){
-// 		echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
-	}
+	public abstract function onMessage(\swoole_websocket_server $server,\swoole_websocket_frame $frame);
 	
 	/*
 	 * 关闭连接
