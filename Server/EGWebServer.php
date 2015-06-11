@@ -3,7 +3,7 @@
 namespace Server;
 
 class EGWebServer extends EGBaseServer{
-	const SEVERNAME ='EGEServer';
+	const SERVERNAME ='EGEServer';
 	
 	protected $_webRoot;
 	

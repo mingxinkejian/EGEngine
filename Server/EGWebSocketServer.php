@@ -40,7 +40,7 @@ class EGWebSocketServer extends EGWebServer{
 	}
 	
 	public function onRequest(\swoole_http_request $request,\swoole_http_response $response){
-		$response->header('Server', self::SEVERNAME);
+		$response->header('Server', self::SERVERNAME);
 		ob_start();
 		
 		$output=ob_get_contents();

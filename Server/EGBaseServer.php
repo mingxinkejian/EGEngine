@@ -2,7 +2,7 @@
 
 namespace Server;
 
-abstract class EGBaseServer implements EGIServer{
+abstract class EGBaseServer {
 	protected $_defaultPort;
 	protected $_defaultHost;
 	protected $_server;
