@@ -227,10 +227,4 @@ class EGBaseServer {
 		$this->_server->close ( $fd );
 	}
 	
-	/*
-	 * 添加监听的回调函数
-	 */
-	public function addFuncCallBack($method, $callback) {
-		$this->_server->on ( $method, $callback );
-	}
 }

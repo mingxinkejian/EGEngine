@@ -16,9 +16,9 @@ class EGHttpServer extends EGWebServer{
 		$this->_defaultPort=$port;
 		$this->_server=new \swoole_http_server($host, $port);
 	
-		$this->addFuncCallBack('start', array($this, 'onStart'));
-		$this->addFuncCallBack('request' , array( $this , 'onRequest'));
-		$this->addFuncCallBack('workerStart' , array( $this , 'onWorkerStart'));
+		$this->_server->on('start', array($this, 'onStart'));
+		$this->_server->on('request' , array( $this , 'onRequest'));
+		$this->_server->on('workerStart' , array( $this , 'onWorkerStart'));
 		
 		if($isSetGlobal==true){
 			$this->_server->setGlobal(HTTP_GLOBAL_ALL,HTTP_GLOBAL_GET | HTTP_GLOBAL_POST);
