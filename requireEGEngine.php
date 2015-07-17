@@ -7,9 +7,16 @@ EGLoader::addNameSpace('Algorithm', $REQUIRE_PATH.'Algorithm');
 EGLoader::addNameSpace('ConfigReader', $REQUIRE_PATH.'ConfigReader');
 EGLoader::addNameSpace('Cache', $REQUIRE_PATH.'Cache');
 EGLoader::addNameSpace('Core', $REQUIRE_PATH.'Core');
+EGLoader::addNameSpace('Exception', $REQUIRE_PATH.'Exception');
 EGLoader::addNameSpace('DB', $REQUIRE_PATH.'DB');
 EGLoader::addNameSpace('Server', $REQUIRE_PATH.'Server');
 EGLoader::addNameSpace('Log', $REQUIRE_PATH.'Log');
 EGLoader::addNameSpace('ServerRun', $REQUIRE_PATH.'ServerRun');
+
 //注册装载器
 EGLoader::register();
+
+// 设定错误和异常处理
+register_shutdown_function('Exception\EGException::fatalError');
+set_error_handler('Exception\EGException::appError');
+set_exception_handler('Exception\EGException::appException');
