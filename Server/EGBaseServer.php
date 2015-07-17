@@ -7,16 +7,11 @@ namespace Server;
 class EGBaseServer {
 	protected $_defaultPort;
 	protected $_defaultHost;
-	protected $_server;
-	protected $_logger;
+	public $_server;
+	public $_logger;
 	protected $_config;
 	protected $_debug = false;
-	/**
-	 * 获取日志控制器
-	 */
-	public function getLogger() {
-		return $this->_logger;
-	}
+
 	/**
 	 * 设置debug
 	 *

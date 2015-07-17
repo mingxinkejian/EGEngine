@@ -23,14 +23,14 @@ class Cocos2dxWebSocket extends EGWebSocketServer{
 	public function __construct($host, $port, $logger,$isSetGlobal=true){
 		parent::__construct($host, $port, $logger,$isSetGlobal);
 		//自定义握手协议
-		$this->addFuncCallBack('handshake',array($this,'onCustomHandShake'));
-		$this->addFuncCallBack('open', array($this,'onOpen'));
-		$this->addFuncCallBack('start', array($this, 'onStart'));
-		$this->addFuncCallBack('request' , array( $this , 'onRequest'));
-		$this->addFuncCallBack('message' , array( $this , 'onMessage'));
-// 		$this->addFuncCallBack('workerStart' , array( $this , 'onWorkerStart'));
-		$this->addFuncCallBack('close', array( $this , 'onClose' ));
-		$this->addFuncCallBack('timer',array($this,'onTimer'));
+		$this->_server->on('handshake',array($this,'onCustomHandShake'));
+		$this->_server->on('open', array($this,'onOpen'));
+		$this->_server->on('start', array($this, 'onStart'));
+		$this->_server->on('request' , array( $this , 'onRequest'));
+		$this->_server->on('message' , array( $this , 'onMessage'));
+// 		$this->_server->on('workerStart' , array( $this , 'onWorkerStart'));
+		$this->_server->on('close', array( $this , 'onClose' ));
+		$this->_server->on('timer',array($this,'onTimer'));
 	}
 	
 	public function onWorkerStart(\swoole_server $server, $workerId) {
