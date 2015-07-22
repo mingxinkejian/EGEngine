@@ -22,35 +22,19 @@ class Cocos2dxWebSocket extends EGWebSocketServer{
 	
 	public function __construct($host, $port, $logger,$isSetGlobal=true){
 		parent::__construct($host, $port, $logger,$isSetGlobal);
-		//自定义握手协议
-		$this->_server->on('handshake',array($this,'onCustomHandShake'));
 		$this->_server->on('open', array($this,'onOpen'));
 		$this->_server->on('start', array($this, 'onStart'));
 		$this->_server->on('request' , array( $this , 'onRequest'));
 		$this->_server->on('message' , array( $this , 'onMessage'));
-// 		$this->_server->on('workerStart' , array( $this , 'onWorkerStart'));
+		$this->_server->on('workerStart' , array( $this , 'onWorkerStart'));
 		$this->_server->on('close', array( $this , 'onClose' ));
-		$this->_server->on('timer',array($this,'onTimer'));
 	}
-	
+
 	public function onWorkerStart(\swoole_server $server, $workerId) {
 		// TODO Auto-generated method stub
 		parent::onWorkerStart($server, $workerId);
 	}
 
-	public function onTimer(\swoole_websocket_server $server,$interval){
-		$conn_list = $server->connection_list();
-		if (!empty($conn_list)) {
-			foreach($conn_list as $fd) {
-				$server->push($fd, 'hello world');
-			}
-		}
-	}
-	
-	public function onRequest(\swoole_http_request $request,\swoole_http_response $response){
-		$response->header('Server', self::SEVERNAME);
-		$response->end();
-	}
 	/**
 	 * 接收到来自客户端的消息
 	 * @param \swoole_websocket_server $server
@@ -58,11 +42,13 @@ class Cocos2dxWebSocket extends EGWebSocketServer{
 	 */
 	public function onMessage(\swoole_websocket_server $server,$frame){
 		$data=json_decode($frame->data,true);
-		switch ($data['type']){
-			case 1:
+		switch ($data['pId']){
+			case 101:
 				$server->push($frame->fd, '{"ret":1000,"data":"welcome to cocos2dx world"}');
 				break;
-			case 2:
+			case 201:
+				$data=$this->wsClose($frame->fd);
+				var_dump($data);
 				break;
 		}
 	}
@@ -72,9 +58,9 @@ class Cocos2dxWebSocket extends EGWebSocketServer{
 $configPath = WEB_ROOT.'ServerRun'.DS. 'serverConf.json';
 $configData = EGJson::parse ( $configPath );
 
-$logger=new EGLog(WEB_ROOT);
+EGLog::setConfig(WEB_ROOT);
 
-$wsServer = new Cocos2dxWebSocket( '127.0.0.1', 9502 ,$logger,false);
+$wsServer = new Cocos2dxWebSocket( '127.0.0.1', 9502,false);
 $wsServer->loadConfig ( $configData ['webSocketServer'] );
 $wsServer->setWebRoot ( WEB_ROOT );
 $wsServer->startServer ();

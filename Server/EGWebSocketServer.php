@@ -2,13 +2,13 @@
 
 namespace Server;
 
+use Log\EGLog;
 abstract class EGWebSocketServer extends EGWebServer {
-	public function __construct($host, $port, $logger, $isSetGlobal = true) {
-		if (! $host || ! $port || ! $logger) {
+	public function __construct($host, $port,$isSetGlobal = true) {
+		if (! $host || ! $port ) {
 			echo "please confirm the params !\n";
 			exit ();
 		}
-		$this->_logger = $logger;
 		$this->_defaultHost = $host;
 		$this->_defaultPort = $port;
 		$this->_server = new \swoole_websocket_server ( $host, $port );
@@ -18,7 +18,7 @@ abstract class EGWebSocketServer extends EGWebServer {
 	}
 	public function onStart($server) {
 		// swoole_set_process_name('EGServer');
-		$this->printLog ( 'webSocketServer start' );
+		EGLog::printLog ( 'webSocketServer start' );
 	}
 	
 	/**
@@ -28,6 +28,7 @@ abstract class EGWebSocketServer extends EGWebServer {
 	 * @param \swoole_http_request $request        	
 	 */
 	public function onOpen(\swoole_websocket_server $server, \swoole_http_request $request) {
+		EGLog::printLog ( "{$request->fd} is EGWebSocketServer connect" );
 	}
 	
 	/**
@@ -66,6 +67,12 @@ abstract class EGWebSocketServer extends EGWebServer {
 		return true;
 	}
 	
+	public function onRequest(\swoole_http_request $request,\swoole_http_response $response){
+		$response->header('Server', self::SERVERNAME);
+		echo 'hello EGWebSocketServer';
+		$response->end('hello');
+	}
+	
 	/**
 	 * 接收到来自客户端的消息
 	 * 
@@ -74,13 +81,18 @@ abstract class EGWebSocketServer extends EGWebServer {
 	 */
 	public function onMessage(\swoole_websocket_server $server, \swoole_websocket_frame $frame) {
 	}
+	
+	public function onClose($fd, $from_id = 0){
+		EGLog::printLog("{$fd} is close");
+	}
+	
 	/**
 	 * websocket close
 	 * @param unknown $fd
 	 * @param number $from_id
 	 */
 	public function wsClose($fd, $from_id = 0) {
-		$this->serverClose($fd);
+		return $this->serverClose($fd);
 	}
 	
 	/**
