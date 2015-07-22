@@ -3,8 +3,8 @@
 namespace Log;
 
 class EGLog {
-	protected $_logRoot;
-	protected $_logger;
+	protected static $_logRoot;
+	protected static $_logger;
 	const ERROR=1;
 	const WARN=2;
 	const DEBUG=3;
@@ -13,31 +13,31 @@ class EGLog {
 	const TYPE_FILE='EGLogFile';
 	const TYPE_MYSQL='EGLogMySql';
 	
-	public function __construct($logDir,$logType=self::TYPE_FILE){
-		$this->_logRoot=$logDir;
+	public static function setConfig($logDir,$logType=self::TYPE_FILE){
+		self::$_logRoot=$logDir;
 		$className='\\Log\\Driver\\'.$logType;
-		$this->_logger=new $className($logDir);
+		self::$_logger=new $className($logDir);
 	}
 	
-	public function printLog($logMsg){
+	public static function printLog($logMsg){
 		echo $logMsg."\n";
 	}
 	
-	public function debug($debugMsg){
+	public static function debug($debugMsg){
 		$logMsg="[DEBUG] ".date('Y-M-d H:i:s').' '.$debugMsg;
-		$this->_logger->write($logMsg);
+		self::$_logger->write($logMsg);
 	}
 	
-	public function warn($warnMsg){
+	public static function warn($warnMsg){
 		$logMsg="[WARN] ".date('Y-M-d H:i:s').' '.$warnMsg;
-		$this->_logger->write($logMsg);
+		self::$_logger->write($logMsg);
 	}
-	public function error($errorMsg){
+	public static function error($errorMsg){
 		$logMsg="[ERROR] ".date('Y-M-d H:i:s').' '.$errorMsg;
-		$this->_logger->write($logMsg);
+		self::$_logger->write($logMsg);
 	}
-	public function info($infoMsg){
+	public static function info($infoMsg){
 		$logMsg="[INFO] ".date('Y-M-d H:i:s').' '.$infoMsg;
-		$this->_logger->write($logMsg);
+		self::$_logger->write($logMsg);
 	}
 }
