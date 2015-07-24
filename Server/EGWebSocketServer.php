@@ -18,7 +18,7 @@ abstract class EGWebSocketServer extends EGWebServer {
 	}
 	public function onStart($server) {
 		// swoole_set_process_name('EGServer');
-		EGLog::printLog ( 'webSocketServer start' );
+		EGLog::info ( 'webSocketServer start' );
 	}
 	
 	/**
@@ -28,7 +28,9 @@ abstract class EGWebSocketServer extends EGWebServer {
 	 * @param \swoole_http_request $request        	
 	 */
 	public function onOpen(\swoole_websocket_server $server, \swoole_http_request $request) {
-		EGLog::printLog ( "{$request->fd} is EGWebSocketServer connect" );
+		if ($this->_debug){
+			EGLog::info ( "{$request->fd} is connect" );
+		}
 	}
 	
 	/**
@@ -64,13 +66,14 @@ abstract class EGWebSocketServer extends EGWebServer {
 		}
 		$response->status ( 101 );
 		$response->end ();
+		
+		$this->onOpen($this->_server, $request);
 		return true;
 	}
 	
 	public function onRequest(\swoole_http_request $request,\swoole_http_response $response){
 		$response->header('Server', self::SERVERNAME);
-		echo 'hello EGWebSocketServer';
-		$response->end('hello');
+		$response->end();
 	}
 	
 	/**
@@ -83,7 +86,9 @@ abstract class EGWebSocketServer extends EGWebServer {
 	}
 	
 	public function onClose($fd, $from_id = 0){
-		EGLog::printLog("{$fd} is close");
+		if ($this->_debug){
+			EGLog::info("{$fd} is close");
+		}
 	}
 	
 	/**

@@ -3,18 +3,18 @@
         "worker_num": 4,
         "daemonize": false,
         "max_request": 10000,
-        "dispatch_mode": 1
+        "dispatch_mode": 2
     },
     "socketServer": {
         "worker_num": 4,
         "daemonize": false,
         "max_request": 10000,
-        "dispatch_mode": 1
+        "dispatch_mode": 2
     },
     "webSocketServer": {
         "worker_num": 4,
         "daemonize": false,
         "max_request": 10000,
-        "dispatch_mode": 1
+        "dispatch_mode": 2
     }
 }
