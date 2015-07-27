@@ -13,7 +13,7 @@ class EGCrypt {
 	
 	public static function init($type='Aes'){
 		$class  =   self::BaseURI.ucwords(strtolower($type));
-		self::$handler  =    $class;
+		self::$_handler  =    $class;
 	}
 	
 	/**
@@ -27,7 +27,7 @@ class EGCrypt {
 		if(empty(self::$handler)){
 			self::init();
 		}
-		$class  =   self::$handler;
+		$class  =   self::$_handler;
 		return $class::encrypt($data,$key,$expire);
 	}
 	
@@ -41,7 +41,7 @@ class EGCrypt {
 		if(empty(self::$handler)){
 			self::init();
 		}
-		$class  =   self::$handler;
+		$class  =   self::$_handler;
 		return $class::decrypt($data,$key);
 	}
 }
