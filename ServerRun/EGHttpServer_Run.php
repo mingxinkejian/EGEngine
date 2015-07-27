@@ -19,7 +19,7 @@ $logRoot=WEB_ROOT.'Runtime'.DS;
 
 EGLog::setConfig($logRoot);
 
-$httpServer = new EGHttpServer( $configData['host'], $configData['port'] ,true);
+$httpServer = new EGHttpServer( $configData['httpServer']['host'], $configData['httpServer']['port'] ,true);
 $httpServer->loadConfig ( $configData ['httpServer'] );
 $httpServer->setWebRoot ( WEB_ROOT );
 $httpServer->startServer ();

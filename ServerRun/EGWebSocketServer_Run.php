@@ -19,7 +19,7 @@ $logRoot=WEB_ROOT.'Runtime'.DS;
 
 EGLog::setConfig($logRoot);
 
-$wsServer = new EGWebSocketServer( $configData['host'], $configData['port'] );
+$wsServer = new EGWebSocketServer( $configData['webSocketServer']['host'], $configData['webSocketServer']['port'] );
 $wsServer->loadConfig ( $configData ['webSocketServer'] );
 $wsServer->setWebRoot ( WEB_ROOT );
 $wsServer->startServer ();
