@@ -1,5 +1,6 @@
 <?php
 use Core\EGLoader;
+use Exception\EGException;
 $REQUIRE_PATH=__DIR__.DIRECTORY_SEPARATOR;
 require_once $REQUIRE_PATH.'Core/EGLoader.php';
 //注册引擎所需的命名空间
@@ -17,6 +18,4 @@ EGLoader::addNameSpace('ServerRun', $REQUIRE_PATH.'ServerRun');
 EGLoader::register();
 
 // 设定错误和异常处理
-register_shutdown_function('Exception\EGException::fatalError');
-set_error_handler('Exception\EGException::appError');
-set_exception_handler('Exception\EGException::appException');
+EGException::initException();

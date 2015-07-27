@@ -2,14 +2,19 @@
 
 namespace Exception;
 
+use Log\EGLog;
 class EGException extends \Exception{
 	
+	public static function initException(){
+		register_shutdown_function('Exception\EGException::fatalError');
+		set_error_handler('Exception\EGException::appError');
+		set_exception_handler('Exception\EGException::appException');
+	}
 	
-	
-	public static function fatalError(){
-		//保存日志
-		if ($e = error_get_last()) {
-			switch($e['type']){
+	public static function fatalError(){		
+		$e = error_get_last();
+		if (!empty($e)) {
+			switch ($e['type']) {
 				case E_ERROR:
 				case E_PARSE:
 				case E_CORE_ERROR:
@@ -18,15 +23,44 @@ class EGException extends \Exception{
 					ob_end_clean();
 					break;
 			}
+			//保存日志
+			EGLog::error($e);
 		}
 	}
 	
 	
-	public static function appError(){
-		
+	public static function appError($errno, $errstr, $errfile, $errline){
+		$errorStr = "[{$errno}] {$errstr} {$errfile} on {$errline} line.";
+		switch ($errno) {
+			case E_ERROR:
+			case E_PARSE:
+			case E_CORE_ERROR:
+			case E_COMPILE_ERROR:
+			case E_USER_ERROR:
+				EGLog::error($errorStr);
+				break;
+			case E_STRICT:
+			case E_USER_WARNING:
+			case E_USER_NOTICE:
+			default:
+				EGLog::info($errorStr);
+				break;
+		}
 	}
 	
-	public static function appException(){
-		
+	public static function appException($e){
+		$error = [];
+		$error['message'] = $e->getMessage();
+		$trace = $e->getTrace();
+		if('E' == $trace[0]['function']) {
+			$error['file'] = $trace[0]['file'];
+			$error['line'] = $trace[0]['line'];
+		}else{
+			$error['file'] = $e->getFile();
+			$error['line'] = $e->getLine();
+		}
+		$error['trace'] = $e->getTraceAsString();
+		// 记录异常日志
+		EGLog::error($error['message'],'ERR');
 	}
 }

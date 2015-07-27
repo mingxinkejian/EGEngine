@@ -1,6 +1,7 @@
 <?php
 use ConfigReader\EGJson;
 use Server\EGWebSocketServer;
+use Log\EGLog;
 if (version_compare ( PHP_VERSION, '5.4.0', '<' ))
 	die ( 'require PHP > 5.4.0 !' );
 
@@ -9,16 +10,16 @@ define ( 'DS', DIRECTORY_SEPARATOR );
 define ( 'WEB_ROOT', __DIR__ . DS . '..' . DS );
 
 // 为方便起见，使用autoload自动加载
-include WEB_ROOT . 'ConfigReader/EGJson.php';
-include WEB_ROOT . 'Server/EGIServer.php';
-include WEB_ROOT . 'Server/EGBaseServer.php';
-include WEB_ROOT . 'Server/EGWebServer.php';
-include WEB_ROOT . 'Server/EGWebSocketServer.php';
+require WEB_ROOT.'requireEGEngine.php';
 
 $configPath = __DIR__ . DS . 'serverConf.json';
 $configData = EGJson::parse ( $configPath );
 
-$wsServer = new EGWebSocketServer( '127.0.0.1', 9502 );
+$logRoot=WEB_ROOT.'Runtime'.DS;
+
+EGLog::setConfig($logRoot);
+
+$wsServer = new EGWebSocketServer( $configData['host'], $configData['port'] );
 $wsServer->loadConfig ( $configData ['webSocketServer'] );
 $wsServer->setWebRoot ( WEB_ROOT );
 $wsServer->startServer ();
