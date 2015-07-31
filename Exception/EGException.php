@@ -51,14 +51,8 @@ class EGException extends \Exception{
 	public static function appException($e){
 		$error = [];
 		$error['message'] = $e->getMessage();
-		$trace = $e->getTrace();
-		if('E' == $trace[0]['function']) {
-			$error['file'] = $trace[0]['file'];
-			$error['line'] = $trace[0]['line'];
-		}else{
-			$error['file'] = $e->getFile();
-			$error['line'] = $e->getLine();
-		}
+		$error['file'] = $e->getFile();
+		$error['line'] = $e->getLine();
 		$error['trace'] = $e->getTraceAsString();
 		// 记录异常日志
 		EGLog::error($error['message'],'ERR');
