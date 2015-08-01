@@ -85,9 +85,9 @@ abstract class EGWebSocketServer extends EGWebServer {
 	public function onMessage(\swoole_websocket_server $server, \swoole_websocket_frame $frame) {
 	}
 	
-	public function onClose($fd, $from_id = 0){
+	public function onClose($server, $clientId, $fromId){
 		if ($this->_debug){
-			EGLog::info("{$fd} is close");
+			EGLog::info("{$clientId} is close");
 		}
 	}
 	
