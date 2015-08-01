@@ -19,7 +19,7 @@
         "worker_num": 4,
         "daemonize": false,
         "max_request": 10000,
-        "dispatch_mode": 2
+        "dispatch_mode": 2,
         "host":"127.0.0.1",
         "port":9501
     }
