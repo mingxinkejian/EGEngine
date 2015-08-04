@@ -122,4 +122,25 @@ class EGRSACrypt {
 	
 		return $public_key_string;
 	}
+	
+	public static function convert_privateKey($private_key) {
+		$private_key_string = "";
+	
+		$count = 0;
+		for($i = 0; $i < strlen ( $private_key ); $i ++) {
+			if ($count < 64) {
+				$private_key_string .= $private_key [$i];
+				$count ++;
+			} else {
+				$private_key_string .= $private_key [$i] . "\r\n";
+				$count = 0;
+			}
+		}
+	
+		$private_key_header = "-----BEGIN RSA PRIVATE KEY-----\r\n";
+		$private_key_footer = "\r\n-----END RSA PRIVATE KEY-----";
+		$private_key_string = $private_key_header . $private_key_string . $private_key_footer;
+	
+		return $private_key_string;
+	}
 }
