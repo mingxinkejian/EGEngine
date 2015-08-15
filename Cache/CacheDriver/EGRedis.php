@@ -34,7 +34,7 @@ class EGRedis extends EGABaseCache{
 		}
 		
 		if ($config['conType']=='pconnect'){
-			$this->_handler->pconnect($host[$connIndex],$port);
+			$this->_handler->pconnect($host[$connIndex],$port,$config['timeout']);
 		}else{
 			$this->_handler->connect($host[$connIndex],$port);
 		}

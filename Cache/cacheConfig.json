@@ -6,6 +6,7 @@
         "port": 6379,
         "isMaster": true,
         "conType": "pconnect",
+        "timeout":0,
         "auth": [],
         "expire":3600
     },
@@ -16,6 +17,7 @@
         "port": 6379,
         "isMaster": true,
         "conType": "pconnect",
+        "timeout":0,
         "auth": [],
         "expire":3600
     }
