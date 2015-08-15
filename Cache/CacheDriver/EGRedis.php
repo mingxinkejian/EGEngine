@@ -3,6 +3,7 @@
 namespace Cache\CacheDriver;
 
 use Cache\EGABaseCache;
+use Exception\EGException;
 class EGRedis extends EGABaseCache{
 	
 
@@ -49,6 +50,10 @@ class EGRedis extends EGABaseCache{
 	 * @see \Cache\EGABaseCache::addCache()
 	 */
 	public function addCache($key, $value, $expire=0 ) {
+		
+		if ($this->_handler->ping() ==false){
+			$this->connection($this->_config);
+		}
 		// TODO Auto-generated method stub
 		return $this->setCache($key, $value, $expire);
 	}
@@ -56,15 +61,19 @@ class EGRedis extends EGABaseCache{
 
 	public function setCache($key, $value, $expire=0 ) {
 		// TODO Auto-generated method stub
-		if($expire==0) {
-			$expire  =  isset($this->_config['expire'])? $this->_config['expire']: 0;
-		}
-		//对数组/对象数据进行缓存处理，保证数据完整性
-		$value  =  (is_object($value) || is_array($value)) ? json_encode($value) : $value;
-		if($expire > 0) {
-			$result = $this->_handler->setex($key, $expire, $value);
-		}else{
-			$result = $this->_handler->set($key, $value);
+		try {
+			if($expire==0) {
+				$expire  =  isset($this->_config['expire'])? $this->_config['expire']: 0;
+			}
+			//对数组/对象数据进行缓存处理，保证数据完整性
+			$value  =  (is_object($value) || is_array($value)) ? json_encode($value) : $value;
+			if($expire > 0) {
+				$result = $this->_handler->setex($key, $expire, $value);
+			}else{
+				$result = $this->_handler->set($key, $value);
+			}
+		} catch (EGException $e) {
+			EGException::appException($e);
 		}
 		return $result;
 	}
@@ -72,6 +81,10 @@ class EGRedis extends EGABaseCache{
 
 	public function getCache($key) {
 		// TODO Auto-generated method stub
+		if ($this->_handler->ping() ==false){
+			$this->connection($this->_config);
+		}
+		
 		$value = $this->_handler->get($key);
 		$jsonData  = json_decode( $value, true );
 		return (empty($jsonData)) ? $value : $jsonData;	//检测是否为JSON数据 true 返回JSON解析数组, false返回源数据
@@ -80,6 +93,10 @@ class EGRedis extends EGABaseCache{
 
 	public function delete($key) {
 		// TODO Auto-generated method stub
+		if ($this->_handler->ping() ==false){
+			$this->connection($this->_config);
+		}
+		
 		return $this->_handler->delete($key);
 	}
 
@@ -89,6 +106,10 @@ class EGRedis extends EGABaseCache{
 	 */
 	public function increment($key, $step = 1) {
 		// TODO Auto-generated method stub
+		if ($this->_handler->ping() ==false){
+			$this->connection($this->_config);
+		}
+		
 		return $this->_handler->incrBy($key, $step);
 	}
 
@@ -98,6 +119,10 @@ class EGRedis extends EGABaseCache{
 	*/
 	public function decrement($key, $step = 1) {
 		// TODO Auto-generated method stub
+		if ($this->_handler->ping() ==false){
+			$this->connection($this->_config);
+		}
+		
 		return $this->_handler->decrBy($key, $step);
 	}
 
@@ -108,11 +133,19 @@ class EGRedis extends EGABaseCache{
 	 */
 	public function clear() {
 		// TODO Auto-generated method stub
+		if ($this->_handler->ping() ==false){
+			$this->connection($this->_config);
+		}
+		
 		return $this->_handler->flushDB();
 	}
 
 	public function __destruct(){
 		if ($this->_config['conType']=='pconnect'){
+			if ($this->_handler->ping() ==false){
+				$this->connection($this->_config);
+			}
+			
 			$this->_handler->close();
 		}
 	}
