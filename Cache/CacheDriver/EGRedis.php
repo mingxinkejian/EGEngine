@@ -50,10 +50,7 @@ class EGRedis extends EGABaseCache{
 	 * @see \Cache\EGABaseCache::addCache()
 	 */
 	public function addCache($key, $value, $expire=0 ) {
-		
-		if ($this->_handler->ping() ==false){
-			$this->connection($this->_config);
-		}
+
 		// TODO Auto-generated method stub
 		return $this->setCache($key, $value, $expire);
 	}
@@ -81,9 +78,6 @@ class EGRedis extends EGABaseCache{
 
 	public function getCache($key) {
 		// TODO Auto-generated method stub
-		if ($this->_handler->ping() ==false){
-			$this->connection($this->_config);
-		}
 		
 		$value = $this->_handler->get($key);
 		$jsonData  = json_decode( $value, true );
@@ -93,9 +87,6 @@ class EGRedis extends EGABaseCache{
 
 	public function delete($key) {
 		// TODO Auto-generated method stub
-		if ($this->_handler->ping() ==false){
-			$this->connection($this->_config);
-		}
 		
 		return $this->_handler->delete($key);
 	}
@@ -106,7 +97,7 @@ class EGRedis extends EGABaseCache{
 	 */
 	public function increment($key, $step = 1) {
 		// TODO Auto-generated method stub
-		if ($this->_handler->ping() ==false){
+		if (empty($this->_handler->ping())){
 			$this->connection($this->_config);
 		}
 		
@@ -119,7 +110,7 @@ class EGRedis extends EGABaseCache{
 	*/
 	public function decrement($key, $step = 1) {
 		// TODO Auto-generated method stub
-		if ($this->_handler->ping() ==false){
+		if (empty($this->_handler->ping())){
 			$this->connection($this->_config);
 		}
 		
@@ -133,7 +124,7 @@ class EGRedis extends EGABaseCache{
 	 */
 	public function clear() {
 		// TODO Auto-generated method stub
-		if ($this->_handler->ping() ==false){
+		if (empty($this->_handler->ping())){
 			$this->connection($this->_config);
 		}
 		
@@ -142,9 +133,6 @@ class EGRedis extends EGABaseCache{
 
 	public function __destruct(){
 		if ($this->_config['conType']=='pconnect'){
-			if ($this->_handler->ping() ==false){
-				$this->connection($this->_config);
-			}
 			
 			$this->_handler->close();
 		}
