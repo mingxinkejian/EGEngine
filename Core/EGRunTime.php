@@ -14,7 +14,7 @@ class EGRunTime {
 	function stop(){//程序运行结束
 		$this->_stopTime = microtime();
 	}
-	function spent(){//程序运行花费的时间
+	function getRunTime(){//程序运行花费的时间
 		if ($this->_timeSpent) {
 			return $this->_timeSpent;
 		} else {
