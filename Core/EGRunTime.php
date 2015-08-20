@@ -1,6 +1,6 @@
 <?php
 
-namespace EGEngine\Core;
+namespace Core;
 /*
  * 用来计算程序运行消耗时间
  */
