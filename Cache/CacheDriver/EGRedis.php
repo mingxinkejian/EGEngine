@@ -97,9 +97,6 @@ class EGRedis extends EGABaseCache{
 	 */
 	public function increment($key, $step = 1) {
 		// TODO Auto-generated method stub
-		if (empty($this->_handler->ping())){
-			$this->connection($this->_config);
-		}
 		
 		return $this->_handler->incrBy($key, $step);
 	}
@@ -110,9 +107,6 @@ class EGRedis extends EGABaseCache{
 	*/
 	public function decrement($key, $step = 1) {
 		// TODO Auto-generated method stub
-		if (empty($this->_handler->ping())){
-			$this->connection($this->_config);
-		}
 		
 		return $this->_handler->decrBy($key, $step);
 	}
@@ -124,12 +118,19 @@ class EGRedis extends EGABaseCache{
 	 */
 	public function clear() {
 		// TODO Auto-generated method stub
-		if (empty($this->_handler->ping())){
-			$this->connection($this->_config);
-		}
 		
 		return $this->_handler->flushDB();
 	}
+	
+	/*
+	 * 定时ping Redis服务器，如果出现连接失败，重连
+	 */
+	public function ping(){
+		if (empty($this->_handler->ping())){
+			$this->connection($this->_config);
+		}
+	}
+	
 
 	public function __destruct(){
 		if ($this->_config['conType']=='pconnect'){
@@ -137,4 +138,5 @@ class EGRedis extends EGABaseCache{
 			$this->_handler->close();
 		}
 	}
+	
 }

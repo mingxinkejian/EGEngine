@@ -88,6 +88,8 @@ class EGABaseCache implements EGICache{
 	}
 
 
-	
+	public function ping(){
+		
+	}
 
 }
