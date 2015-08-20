@@ -15,15 +15,11 @@ class EGRunTime {
 		$this->_stopTime = microtime();
 	}
 	function getRunTime(){//程序运行花费的时间
-		if ($this->_timeSpent) {
-			return $this->_timeSpent;
-		} else {
-			list($StartMicro, $StartSecond) = explode(" ", $this->_startTime);
-			list($StopMicro, $StopSecond) = explode(" ", $this->_stopTime);
-			$start = doubleval($StartMicro) + $StartSecond;
-			$stop = doubleval($StopMicro) + $StopSecond;
-			$this->_timeSpent = $stop - $start;
-			return substr($this->_timeSpent,0,8)." s";//返回获取到的程序运行时间差
-		}
+		list($StartMicro, $StartSecond) = explode(" ", $this->_startTime);
+		list($StopMicro, $StopSecond) = explode(" ", $this->_stopTime);
+		$start = doubleval($StartMicro) + $StartSecond;
+		$stop = doubleval($StopMicro) + $StopSecond;
+		$this->_timeSpent = $stop - $start;
+		return substr($this->_timeSpent,0,8)." s";//返回获取到的程序运行时间差
 	}
 }
