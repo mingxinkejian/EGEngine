@@ -14,11 +14,5 @@ Author
 mingtingjian 
 email：mingtingjian@sina.com 
 
-andot 
-mabingyao@gmail.com
-
-lscgzwd 
-lscgzwd@gmail.com
-
 How to use it？  
 -------------
