@@ -83,6 +83,7 @@ class EGBaseServer {
 	 */
 	public function onWorkerStart($server, $workerId) {
 		// swoole_set_process_name('EGServer_worker');
+		echo "WorkerStart: MasterPid={$server->master_pid}|Manager_pid={$server->manager_pid}|WorkerId={$server->worker_id}|WorkerPid={$server->worker_pid}".PHP_EOL;
 		if ($this->_debug) {
 			EGLog::debug ( "WorkerStart: MasterPid={$server->master_pid}|Manager_pid={$server->manager_pid}|WorkerId={$server->worker_id}|WorkerPid={$server->worker_pid}" );
 		}
