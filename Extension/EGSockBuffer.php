@@ -93,9 +93,9 @@ class EGSockBuffer {
 		$bytes = $this->readBytes(8);
 		
 		if ($this->_endian == EGSockBuffer::SOCKBUFFER_BIG){
-			list ($hi,$lo) = array_values(unpack('NN',strrev($bytes)));
+			list ($hi,$lo) = array_values(unpack('N*N*',strrev($bytes)));
 		}else{
-			list ($hi,$lo) = array_values(unpack('NN',$bytes));
+			list ($hi,$lo) = array_values(unpack('N*N*',$bytes));
 		}
 		if ($hi <0) $hi += (1 << 32);
 		if ($lo <0) $lo += (1 << 32);
@@ -140,12 +140,12 @@ class EGSockBuffer {
 	public function readUint64(){
 		$bytes = $this->readBytes(8);
 		if ($this->_endian == EGSockBuffer::SOCKBUFFER_BIG){
-			list ($hi,$lo) = array_values(unpack('NN',strrev($bytes)));
-		}else{
 			list ($hi,$lo) = array_values(unpack('NN',$bytes));
+			$lo << 32;
+		}else{
+			list ($hi,$lo) = array_values(unpack('N*N*',$bytes));
+			$hi << 32;
 		}
-		if ($hi <0) $hi += (1 << 32);
-		if ($lo <0) $lo += (1 << 32);
 		return ($hi << 32) + $lo;
 	}
 	/**
@@ -180,13 +180,12 @@ class EGSockBuffer {
 	 */
 	public function readString(){
 		$len = $this->readUint32();
-        if($len <=0){  
-            return false;  
+        if($len <=0){
+            return false;
         }
         
         $bytes = $this->readBytes($len);
-        $key = '/a'. $len;  
-        $result = unpack('@' . $this->_rPos . $key, $bytes);  
+        $result = unpack('a*', $bytes);
         return $result[1];
 	}
 	/**
@@ -216,9 +215,9 @@ class EGSockBuffer {
 	 */
 	public function writeInt64($value){
 		if ($this->_endian == EGSockBuffer::SOCKBUFFER_BIG){
-			$this->writeBytes(strrev(pack('NN',$value >> 32,$value&0xFFFFFFFF)));
+			$this->writeBytes(strrev(pack('N*N*',$value >> 32,$value&0xFFFFFFFF)));
 		}else{
-			$this->writeBytes(pack('NN',$value >> 32,$value&0xFFFFFFFF));
+			$this->writeBytes(pack('N*N*',$value >> 32,$value&0xFFFFFFFF));
 		}
 	}
 	/**
@@ -311,8 +310,7 @@ class EGSockBuffer {
 		$sockBuff->writeInt64 (9223372036854775800);
 		$sockBuff->writeUint8(255);
 		$sockBuff->writeUint16(1000);
-		$sockBuff->writeUint32(4294967295);
-// 		$sockBuff->writeUint64(4294907295);
+		$sockBuff->writeUint32(4294967295);		
 		$sockBuff->writeFloat(100);
 		$sockBuff->writeDouble(2500);
 		$sockBuff->writeString('{"hello":"test中国"}');
@@ -331,8 +329,6 @@ class EGSockBuffer {
 		echo ($result) .PHP_EOL;
 		$result = $sockBuff->readUint32();
 		echo ($result) .PHP_EOL;
-// 		$result = $sockBuff->readUint64();
-// 		echo ($result) .PHP_EOL;
 		$result = $sockBuff->readFloat();
 		echo ($result) .PHP_EOL;
 		$result = $sockBuff->readDouble();
