@@ -17,4 +17,14 @@ class EGSocketServer extends EGBaseServer{
 			EGLog::info ( "{$fd} is connect" );
 		}
 	}
+	
+	/**
+	 * 
+	 * @param $fd
+	 * @param $data
+	 * @return boolean
+	 */
+	public function send($fd,$data) {
+		return $this->_server->send($fd,$data);
+	}
 }

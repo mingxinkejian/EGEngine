@@ -405,16 +405,6 @@ function swoole_event_wait() {
 }
 
 /**
- * 添加定时器，可用于客户端环境和fpm中
- *
- * @param $interval
- * @param $callback
- * @return int
- */
-function swoole_timer_add($interval, $callback) {
-}
-
-/**
  * 单次定时器，在N毫秒后执行回调函数
  * @param $ms
  * @param $callback
@@ -1775,6 +1765,13 @@ class swoole_table
 	 */
 	function set($key, array $array) {}
 
+	/**
+	 * 检查table中是否存在某一个key
+	 * @param $key
+	 * @return boolean
+	 */
+	function exist($key){}
+	
 	/**
 	 * 删除key
 	 * @param $key
