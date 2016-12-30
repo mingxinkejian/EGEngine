@@ -175,6 +175,7 @@ class EGGateWayRegister extends EGTcpServer{
 		}
 		
 		$this->_buffer[$fd] .= $data;
+		$this->_bufferLen[$fd] = strlen($this->_buffer[$fd]);
 		
 		$buffer = &$this->_buffer[$fd];
 		

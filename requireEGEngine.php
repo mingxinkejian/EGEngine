@@ -21,4 +21,4 @@ EGLoader::addNameSpace('ServerRun', $REQUIRE_PATH.'ServerRun');
 EGLoader::register();
 
 // 设定错误和异常处理
-EGException::initException();
+// EGException::initException();

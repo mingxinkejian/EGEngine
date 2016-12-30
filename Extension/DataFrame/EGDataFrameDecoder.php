@@ -18,16 +18,21 @@ namespace Extension\DataFrame;
  */
 abstract class EGDataFrameDecoder {
 	
-	
+	/**
+	 * 检查完整性
+	 * @param unknown $buffer
+	 */
+	public abstract function input($buffer);
 
-	protected function callDecode(&$inData,&$outData) {
-	
-	}
+	/**
+	 * 打包数据
+	 * @param unknown $buffer
+	 */
+	public abstract function encode($buffer);
 	/**
 	 * 解析数据包
 	 * @param unknown $inData
 	 * @param unknown $outData
 	 */
-	public function decode(&$inData,&$outData);
-
+	public abstract function decode($buffer);
 }

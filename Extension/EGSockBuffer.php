@@ -17,13 +17,13 @@ namespace Extension;
  */
 class EGSockBuffer {
 	//大端
-	const SOCKBUFFER_BIG = 1;
+	const SOCKBUFFER_BIG = 0x1;
 	//小端
-	const SOCKBUFFER_LITTLE = 2;
+	const SOCKBUFFER_LITTLE = 0x2;
 	
 	private $_datas = '';
-	public $_rPos = 0;
-	public $_wPos = 0;
+	private $_rPos = 0;
+	private $_wPos = 0;
 	private$_endian;
 	public function __construct($endian = EGSockBuffer::SOCKBUFFER_BIG){
 		$this->_endian = $endian;
@@ -35,8 +35,77 @@ class EGSockBuffer {
 	
 	public function setData($data){
 		$this->_datas = $data;
-		$this->_wPos += strlen($data);
+		$this->_rPos = 0;
+		$this->_wPos = strlen($data);
+		
 	}
+	
+	public function clear() {
+		$this->_rPos = 0;
+		$this->_wPos = 0;
+		$this->_datas = '';
+	}
+	
+	/**
+	 * 获取当前读取指针位置
+	 * @return number
+	 */
+	public function getReaderIndex() {
+		return $this->_rPos;
+	}
+	
+	/**
+	 * 获取当前写入指针位置
+	 * @return number
+	 */
+	public function getWriterIndex() {
+		return $this->_wPos;
+	}
+	
+	/**
+	 * 偏移读取指针
+	 * @param unknown $offset
+	 * @return \Extension\EGSockBuffer
+	 */
+	public function readerIndex($offset) {
+		$this->_rPos = $offset;
+		return $this;
+	}
+	/**
+	 * 偏移写入指针
+	 * @param unknown $offset
+	 * @return \Extension\EGSockBuffer
+	 */
+	public function writerIndex($offset) {
+		$this->_wPos = $offset;
+		return $this;
+	}
+	
+	/**
+	 * 读取一个字节
+	 * @param unknown $index
+	 * @return string
+	 */
+	public function getByte($index) {
+		return substr($this->_datas, $index,1);
+	}
+	/**
+	 * 跳过几个字节字符
+	 * @param unknown $len
+	 * @return \Extension\EGSockBuffer
+	 */
+	public function skipBytes($len) {
+		$this->_rPos += $len;
+		return $this;
+	}
+	
+	public function readRetainedSlice($length) {
+		$buffer = new EGSockBuffer();
+		$data = $this->readBytes($length);
+		$buffer->setData($data);
+		return $buffer;
+	}
+	
 	/**
 	 * 读取字节
 	 * @param unknown $len
@@ -299,6 +368,11 @@ class EGSockBuffer {
 	
 	public function length(){
 		return $this->_wPos - $this->_rPos;
+	}
+	
+	public function forEachByte($compareData) {
+		
+		return $compareData();
 	}
 	
 	public static function testBuffer(){

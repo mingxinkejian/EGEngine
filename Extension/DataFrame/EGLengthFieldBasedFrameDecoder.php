@@ -97,11 +97,48 @@ namespace Extension\DataFrame;
  */
 class EGLengthFieldBasedFrameDecoder extends EGDataFrameDecoder{
 	
+	private $_byteOrder;
+	private $_maxLength;
+	private $_lengthFieldOffset;
+	private $_lengthFieldLength;
+	private $_lengthFieldEndOffset;
+	private $_lengthAdjustment;
+	private $_initialBytesToStrip;
+	private $_tooLongLength;
+	private $_bytesToDiscard;
+	
+	
+	public function __construct($byteOrder,$maxLength,$lengthFieldOffset,$lengthFieldLength,$lengthAdjustment,$initialBytesToStrip) {
+		$this->_byteOrder = $byteOrder;
+		$this->_maxLength = $maxLength;
+		$this->_lengthFieldOffset = $lengthFieldOffset;
+		$this->_lengthFieldLength = $lengthFieldLength;
+		$this->_lengthAdjustment = $lengthAdjustment;
+		$this->_initialBytesToStrip = $initialBytesToStrip;
+	}
+	
+	/* (non-PHPdoc)
+	 * @see \Extension\DataFrame\EGDataFrameDecoder::input()
+	*/
+	public function input($buffer) {
+		// TODO Auto-generated method stub
+		//判断第几个字节是长度位置
+		
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Extension\DataFrame\EGDataFrameDecoder::encode()
+	 */
+	public function encode($data) {
+	
+	}
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see \Extension\DataFrame\EGDataFrameDecoder::decode()
 	 */
-	public function decode(&$inData, &$outData) {
+	public function decode($buffer, &$outData) {
 		
 	}
 }
