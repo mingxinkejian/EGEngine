@@ -108,11 +108,12 @@ class EGLengthFieldBasedFrameDecoder extends EGDataFrameDecoder{
 	private $_bytesToDiscard;
 	
 	
-	public function __construct($byteOrder,$maxLength,$lengthFieldOffset,$lengthFieldLength,$lengthAdjustment,$initialBytesToStrip) {
+	public function __construct($byteOrder,$maxLength,$lengthFieldOffset,$lengthFieldLength,$lengthFieldEndOffset,$lengthAdjustment,$initialBytesToStrip) {
 		$this->_byteOrder = $byteOrder;
 		$this->_maxLength = $maxLength;
 		$this->_lengthFieldOffset = $lengthFieldOffset;
 		$this->_lengthFieldLength = $lengthFieldLength;
+		$this->_lengthFieldEndOffset = $lengthFieldEndOffset;
 		$this->_lengthAdjustment = $lengthAdjustment;
 		$this->_initialBytesToStrip = $initialBytesToStrip;
 	}
@@ -123,7 +124,15 @@ class EGLengthFieldBasedFrameDecoder extends EGDataFrameDecoder{
 	public function input($buffer) {
 		// TODO Auto-generated method stub
 		//判断第几个字节是长度位置
+		$bufLen = strlen($buffer);
+		if ($bufLen >= $this->_maxLength) {
+			return -1;
+		}else if($bufLen < $this->_lengthFieldEndOffset) {
+			return 0;
+		}
 		
+		
+		return $this->getFrameLength($buffer);
 	}
 	
 	/**
@@ -138,7 +147,27 @@ class EGLengthFieldBasedFrameDecoder extends EGDataFrameDecoder{
 	 * (non-PHPdoc)
 	 * @see \Extension\DataFrame\EGDataFrameDecoder::decode()
 	 */
-	public function decode($buffer, &$outData) {
+	public function decode($buffer) {
 		
+	}
+	
+	public function getFrameLength($buffer) {
+		
+		switch ($this->_lengthFieldLength) {
+			case 1:
+				$len = unpack('C', $buffer);
+				break;
+			case 2:
+				$len = unpack('n', $buffer);
+				break;
+			case 3:
+				$len = unpack('C3', $buffer);
+				break;
+			case 4:
+				$len = unpack('N', $buffer);
+				break;
+		}
+		
+		return $len;
 	}
 }

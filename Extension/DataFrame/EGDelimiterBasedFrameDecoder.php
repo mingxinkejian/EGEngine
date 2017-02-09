@@ -38,7 +38,7 @@ class EGDelimiterBasedFrameDecoder extends EGDataFrameDecoder{
 		if (strlen($buffer) >= $this->_maxLength) {
 			return -1;
 		}
-		//先找\n再找\r
+		//找分隔符
 		$eol = strpos($buffer, $this->_delimiter);
 		if ($eol === false) {
 			return 0;
